@@ -1,62 +1,47 @@
 class BowlingScore
 
+  def initialize
   @current_score = nil
-  @current_frame = [-1, -1]
-  @game_frame = Array.new
-  @game_frame << @current_frame
+  @game_frame = Array.new(10) {Array.new(2)}
   @frame = 0
+  @roll = 0
+  end
 
   def next_score score
-
     if score < 11
       @current_score = score
       if score == 10
-        @current_frame[0] = @current_score
-        @game_frame[@frame] << @current_frame
-        change_frame
-
-      elsif @current_frame[0] < 0
-        @current_frame[0] = @current_score
-        @game_frame[frame] << @current_frame
-
-      elsif @current_frame[0] > -1 && @current_frame[1] < 0
-        @current_frame[1] = @current_score
-        @game_frame[frame] << @current_frame
+        @game_frame[@frame][@roll] = @current_score
+        @frame = @frame + 1
+      elsif @roll == 0
+        @game_frame[@frame][@roll] = @current_score
+        @roll = 1
+      elsif @roll == 1
+        @game_frame[@frame][@roll] = @current_score
+        @roll = 0
+        @frame = @frame + 1
 
       else
         return false
       end
       return true
     end
-    return false
+    false
   end
 
   def last_score
-    return @current_score
+    @current_score
   end
 
-  def this_frame_score
-    frame_score = @game_frame[@frame]
-    if frame_score[0] + frame_score[1] == -2
-      return 0
-    elsif frame_score[0] > -1 && frame_score[1] < 0
-      return frame_score[1]
-    else
-      return frame_score[0] + frame_score[1]
-    end
-  end
-
-  def changeFrame
-    @frame = @frame + 1
-    @current_frame[0] = -1
-    @current_frame[1] = -1
-    @gameFrame[@frame] << @current_frame
+  def frame_score frame
+    frame_score = @game_frame[frame]
+    (frame_score[0] == nil ? 0 : frame_score[0]) + (frame_score[1] == nil ? 0 : frame_score[1])
   end
 
   def prev_frame
     previous_frame = @frame -1
     puts @game_frame[previous_frame].inspect
-    return 0
+    0
   end
 
 

@@ -2,7 +2,7 @@ require 'rspec'
 require './bowling.rb'
 
 describe BowlingScore do
-  before(:each) do
+  before :each do
     @bowling_score = BowlingScore.new
   end
 
@@ -10,33 +10,36 @@ describe BowlingScore do
     @bowling_score.should_not be_nil
   end
 
-  it "Score should accept the result of a roll" do
+  it "should accept the result of a roll and return that score as last score" do
     @bowling_score.next_score(1).should be_true
+    @bowling_score.last_score.should == 1
   end
-  #public class BowlingScoreTest{
-  #  @Test
-  #  public void BowlingScoreExists()
-  #  {
-  #      BowlingScore curScore = new BowlingScore();
-  #  assertNotNull("It should create a bowling scorer object", curScore);
-  #}
-  #
-  #@Test
-  #public void BowlingScoreAcceptsScores()
-  #{
-  #    BowlingScore curScore = new BowlingScore();
-  #assertTrue("Score should accept the result of a roll", curScore.nextScore(1));
-  #assertEquals("Last score should equal 1", 1, curScore.lastScore());
-  #assertTrue("Score should accept a 2", curScore.nextScore(2));
-  #assertEquals("Last score should equal 2", 2, curScore.lastScore());
-  #assertFalse("Score for a single roll should not be more than 10", curScore.nextScore(11));
-  #}
-  #
-  #@Test
+
+  it "should accept a score of 2 and last score should be 2" do
+    @bowling_score.next_score(2).should be_true
+    @bowling_score.last_score.should == 2
+  end
+
+  it "Score for a single roll should not be more than 10" do
+    @bowling_score.next_score(11).should be_false
+  end
+
+  it "should have a score of 0 for current frame" do
+    @bowling_score.frame_score(0).should == 0
+  end
+
+  it "should return a 1 after the first '1' roll in a frame" do
+    @bowling_score.next_score(1)
+    @bowling_score.frame_score(0).should == 1
+    @bowling_score.next_score(3)
+    @bowling_score.frame_score(0).should == 4
+    @bowling_score.next_score(5)
+    @bowling_score.frame_score(1).should == 5
+  end
+
   #public void BowlingScoreByFrame()
   #{
   #    BowlingScore curScore = new BowlingScore();
-  #assertEquals("Current frame should have a score of 0", 0, curScore.thisFrameScore());
   #curScore.nextScore(1);
   #assertEquals("After one roll, current frame should be 1", 1, curScore.thisFrameScore());
   #curScore.nextScore(1);
