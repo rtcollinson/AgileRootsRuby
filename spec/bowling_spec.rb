@@ -49,11 +49,6 @@ describe BowlingScore do
     @bowling_score.frame_score(0).should == "X"
   end
 
-  #it "should account for spares when all ten pins are down in a frame" do
-  #  @bowling_score.next_score(10)
-  #  @bowling_score.frame_score(0).should == 10
-  #end
-
   it "if a frame other than the 10th adds to more than 10 even when individual rolls are less than 10, next_score returns false and doesn't change frame'" do
     @bowling_score.next_score(9).should be_true
     @bowling_score.next_score(8).should be_false
@@ -107,7 +102,39 @@ describe BowlingScore do
     @bowling_score.frame_score(0).should == 13
   end
 
+  it "should handle the 9th frame strike scoring correctly" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(8).should == "X"
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(8).should == "X"
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(8).should == 30
+  end
 
+  it "should handle a spare in the ninth frame" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(9)
+    @bowling_score.next_score(1)
+    @bowling_score.frame_score(8).should == "/"
+    @bowling_score.next_score(3)
+    @bowling_score.frame_score(8).should == 13
+
+  end
 end
 
 describe "TenthFrame" do
@@ -150,5 +177,207 @@ describe "TenthFrame" do
     @bowling_score.next_score(5).should be_true
   end
 
+  it "should not give a score on the tenth frame if the first two rolls are strikes" do
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(9).should == "X"
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(9).should == "X"
+    @bowling_score.next_score(10)
+    @bowling_score.frame_score(9).should == 30
+  end
 
+  it "should handle two strikes and a number" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(5)
+    @bowling_score.frame_score(9).should == 25
+  end
+
+  it "should handle a strike and a spare" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(3)
+    @bowling_score.next_score(7)
+    @bowling_score.frame_score(9).should == 20
+  end
+
+  it "should handle a spare and a one number less than 10" do
+    @bowling_score.next_score(7)
+    @bowling_score.frame_score(9).should == 7
+    @bowling_score.next_score(3)
+    @bowling_score.frame_score(9).should == "/"
+    @bowling_score.next_score(5)
+    @bowling_score.frame_score(9).should == 15
+  end
+
+  it "should handle two rolls less than ten" do
+    @bowling_score.next_score(1)
+    @bowling_score.next_score(0)
+    @bowling_score.frame_score(9).should == 1
+  end
+
+  it "should handle a spare and a 0" do
+    @bowling_score.next_score(7)
+    @bowling_score.frame_score(9).should == 7
+    @bowling_score.next_score(3)
+    @bowling_score.frame_score(9).should == "/"
+    @bowling_score.next_score(0)
+    @bowling_score.frame_score(9).should == 10
+  end
+end
+
+describe "Score all the things" do
+
+  before :each do
+    @bowling_score = BowlingScore.new
+    # Fill the first 9 frames
+
+  end
+  it "should score a perfect game as 300" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.total_score.should == 300
+  end
+
+  it "should handle an imperfect game with a spare in the first" do
+    @bowling_score.next_score(7)
+    @bowling_score.next_score(3)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.total_score.should == 290
+  end
+
+  it "should handle a perfectly crappy game" do
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.next_score(0)
+    @bowling_score.total_score.should == 0
+  end
+
+  it "should show the total score after 5 frames" do
+    @bowling_score.next_score(1)
+    @bowling_score.next_score(2)
+    @bowling_score.next_score(3)
+    @bowling_score.next_score(4)
+    @bowling_score.next_score(5)
+    @bowling_score.next_score(4)
+    @bowling_score.next_score(7)
+    @bowling_score.next_score(1)
+    @bowling_score.next_score(2)
+    @bowling_score.next_score(4)
+    @bowling_score.total_score.should == 33
+  end
+end
+
+describe "Max Score" do
+  before :each do
+    @bowling_score = BowlingScore.new
+  end
+
+  it "should have a max score available after the first frame is filled" do
+    @bowling_score.next_score(1)
+    @bowling_score.next_score(2)
+    @bowling_score.max_score.should == 273
+  end
+
+  it "gives the correct max score on the tenth frame" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.total_score.should == 240
+    @bowling_score.max_score.should == 300
+  end
+
+  it "gives a correct max score if there is a spare in the first frame" do
+    @bowling_score.next_score(1)
+    @bowling_score.next_score(9)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.total_score.should == 230
+    @bowling_score.max_score.should == 290
+  end
+
+  it "gives a correct max score when a strike in the first roll of tenth frame" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.max_score.should == 300
+  end
+
+  it "gives a correct max score when a spare in the first rolls of tenth frame" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(9)
+    @bowling_score.next_score(1)
+    @bowling_score.max_score.should == 280
+  end
+
+  it "gives a correct max score when a spare in the first rolls of tenth frame" do
+    @bowling_score.next_score(10)
+    @bowling_score.next_score(3)
+    @bowling_score.max_score.should == 280
+  end
 end
