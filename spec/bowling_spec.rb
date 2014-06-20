@@ -11,17 +11,17 @@ describe BowlingScore do
   end
 
   it "should accept the result of a roll and return that score as the frame score" do
-    @bowling_score.next_score(1).should be_true
+    expect(@bowling_score.next_score(1)).to eq(true)
     @bowling_score.frame_score(0).should == 1
   end
 
   it "should accept a score of 2 and frame score should be 2" do
-    @bowling_score.next_score(2).should be_true
+    expect(@bowling_score.next_score(2)).to eq(true)
     @bowling_score.frame_score(0).should == 2
   end
 
   it "Score for a single roll should not be more than 10" do
-    @bowling_score.next_score(11).should be_false
+    expect(@bowling_score.next_score(11)).to eq(false)
   end
 
   it "should have a score of 0 for current frame" do
@@ -50,9 +50,9 @@ describe BowlingScore do
   end
 
   it "if a frame other than the 10th adds to more than 10 even when individual rolls are less than 10, next_score returns false and doesn't change frame'" do
-    @bowling_score.next_score(9).should be_true
-    @bowling_score.next_score(8).should be_false
-    @bowling_score.next_score(1).should be_true
+    expect(@bowling_score.next_score(9)).to eq(true)
+    expect(@bowling_score.next_score(8)).to eq(false)
+    expect(@bowling_score.next_score(1)).to eq(true)
     @bowling_score.frame_score(0).should == "/"
   end
 
@@ -153,28 +153,28 @@ describe "TenthFrame" do
   end
 
   it "should allow you to have three strikes in the 10th frame" do
-    @bowling_score.next_score(10).should be_true
-    @bowling_score.next_score(10).should be_true
-    @bowling_score.next_score(10).should be_true
+    expect(@bowling_score.next_score(10)).to eq(true)
+    expect(@bowling_score.next_score(10)).to eq(true)
+    expect(@bowling_score.next_score(10)).to eq(true)
   end
 
   it "should handle a spare" do
-    @bowling_score.next_score(5).should be_true
-    @bowling_score.next_score(5).should be_true
-    @bowling_score.next_score(5).should be_true
+    expect(@bowling_score.next_score(5)).to eq(true)
+    expect(@bowling_score.next_score(5)).to eq(true)
+    expect(@bowling_score.next_score(5)).to eq(true)
   end
 
   it "if two rolls < 10 dont allow a third roll" do
-    @bowling_score.next_score(5).should be_true
-    @bowling_score.next_score(4).should be_true
-    @bowling_score.next_score(5).should be_false
+    expect(@bowling_score.next_score(5)).to eq(true)
+    expect(@bowling_score.next_score(4)).to eq(true)
+    expect(@bowling_score.next_score(5)).to eq(false)
   end
 
   it "should not allow the second roll to allow the frame to add to more than 10" do
     @bowling_score.next_score(5)
-    @bowling_score.next_score(6).should be_false
-    @bowling_score.next_score(5).should be_true
-    @bowling_score.next_score(5).should be_true
+    expect(@bowling_score.next_score(6)).to eq(false)
+    expect(@bowling_score.next_score(5)).to eq(true)
+    expect(@bowling_score.next_score(5)).to eq(true)
   end
 
   it "should not give a score on the tenth frame if the first two rolls are strikes" do
