@@ -21,7 +21,7 @@ This will run all of the tests!
 - Install Ubuntu 14.04 LTS with standard settings:
 	- Download updates on install
 	- Download 3rd party drivers on install
-- Open your Terminal Window by clicking the upper left hand "spirly" menu and typing "Terminal" and hitting enter.
+- Open your Terminal Window by clicking the upper left hand "spiral" menu and typing "Terminal" and hitting enter.
 - Install git:
 	- `sudo apt-get install git`
 - Install OpenSSL for development:
