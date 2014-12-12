@@ -62,7 +62,7 @@ This will run all of the tests!
 - Run rspec to see the tests run and start fixing failed tests:
 	- `rspec`
 
-###Just the Instructions###	
+###Just the Instructions	
 
 - Download and install Ubuntu 14.04 LTS with updates and 3rd party drivers
 - `sudo apt-get install git`
