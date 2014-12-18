@@ -372,12 +372,12 @@ describe "Max Score" do
     @bowling_score.next_score(10)
     @bowling_score.next_score(9)
     @bowling_score.next_score(1)
-    @bowling_score.max_score.should == 280
+    @bowling_score.max_score.should == 290
   end
 
   it "gives a correct max score when a spare in the first rolls of tenth frame" do
     @bowling_score.next_score(10)
     @bowling_score.next_score(3)
-    @bowling_score.max_score.should == 280
+    @bowling_score.max_score.should == 290
   end
 end
